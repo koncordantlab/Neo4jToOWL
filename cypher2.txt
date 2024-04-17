@@ -1,0 +1,38 @@
+CALL apoc.load.json("file:///converted_sample_JSON.json") YIELD value
+UNWIND value.safetyreport as report
+MERGE (sr:SafetyReport {safetyreportid: report.safetyreportid, name: 'safetyreport'})
+SET sr.serious = report.serious, 
+    sr.version = report.safetyreportversion,
+    sr.seriousnessdeath = report.seriousnessdeath,
+    sr.seriousnesslifethreatening = report.seriousnesslifethreatening,
+    sr.seriousnesshospitalization = report.seriousnesshospitalization,
+    sr.seriousnessdisabling = report.seriousnessdisabling,
+    sr.seriousnesscongenitalanomali = report.seriousnesscongenitalanomali,
+    sr.seriousnessother = report.seriousnessother
+WITH sr, report
+MERGE (p:Patient {id: sr.safetyreportid + '_patient', name: 'patient'})
+SET p.patientonsetage = report.patient.patientonsetage, 
+    p.patientonsetageunit = report.patient.patientonsetageunit, 
+    p.patientagegroup = report.patient.patientagegroup, 
+    p.patientweight = report.patient.patientweight,
+    p.sex = report.patient.patientsex
+CREATE (sr)-[:HAS_PATIENT]->(p)
+FOREACH (reaction in report.patient.reaction | 
+    MERGE (a:AdverseEvent {name: reaction.reactionmeddrapt})
+    on create set a.outcome = reaction.reactionoutcome
+    MERGE (p)-[:EXPERIENCED]->(a)
+)
+FOREACH (drug in report.patient.drug |
+    MERGE (d:Drug {name: drug.medicinalproduct})
+    ON CREATE SET d.characterization = drug.drugcharacterization, 
+                  d.authorizationNumber = drug.drugauthorizationnumb, 
+                  d.dosageText = drug.drugdosagetext,
+                  d.dosageForm = drug.drugdosageform,
+                  d.indication = drug.drugindication,
+                  d.startDate = drug.drugstartdate,
+                  d.action = drug.actiondrug,
+                  d.activeSubstanceName = drug.activesubstance.activesubstancename,
+                  d.endDate = drug.drugenddate,
+                  d.batchNumber = drug.drugbatchnumb
+    MERGE (p)-[:TOOK]->(d)
+)
