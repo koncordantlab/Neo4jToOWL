@@ -16,6 +16,9 @@ Neo4j Database To OWL File Conversion Using Python
 - **FDA_Ontology_Creation-checkpoint.ipynb**  
   A Jupyter notebook that provides detailed documentation of the ontology creation process. It includes Python code snippets for data manipulation that outline the methodology used during the ontology development.
 
+- **ontology_with_subclasses2.owl**
+  It is the final output OWL file generated.
+
 ## Setup Instructions
 
 To properly use this repository's resources, please ensure you have Python and Neo4j installed on your system.
