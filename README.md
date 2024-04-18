@@ -20,15 +20,15 @@ Neo4j Database To OWL File Conversion Using Python
 
 To properly use this repository's resources, please ensure you have Python and Neo4j installed on your system.
 
-1. **Downloading FDA Data**
+- **Downloading FDA Data**
     Quarterly data can be downloaded from the FAERS database. The URL is "https://fis.fda.gov/extensions/FPD-QDE-FAERS/FPD-QDE-FAERS.html".
 
-2. **Run Python Scripts**
+- **Run Python Scripts**
     Execute the Python scripts on the downloaded data. First, modify the data and convert it into JSON, using the respective Python scripts.
 
-3. **Data Loading**
+- **Data Loading**
     Import the data into your Neo4j database using the Cypher queries in cypher2.txt.
 
-4. **OWL File Conversion**
+- **OWL File Conversion**
     After loading the data into Neo4j, connect the database using the driver mentioned in the .ipynb file. Make sure your Neo4j server is running before connecting to the server. Execute the scripts in the .ipynb file and mention the destination where you want to download     the final .owl file.
    
